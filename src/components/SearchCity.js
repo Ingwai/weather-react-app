@@ -7,12 +7,15 @@ const API_KEY = '&appid=89071a05cb01e4998ab59d9d624990ef';
 const API_UNITS = '&units=metric';
 
 const SearchCity = () => {
-	const [enteredCity, setEnteredCity] = useState('Kielce');
-	const enteredCityHandler = e => setEnteredCity(e.target.value);
-
-	const [weatherInfo, setWeatherInfo] = useState({});
-	const getWeatherInfo = useCallback (async () => {
-        		try {
+	const [enteredCity, setEnteredCity] = useState('Kielce'); //funkcja i zmienna updaetująca wpisane miasto
+	const enteredCityHandler = e => setEnteredCity(e.target.value); //to co jest wpisane w polu input przechwytujemy
+	
+	const [weatherInfo, setWeatherInfo] = useState({}); //funkcja i zmienna updaetująca objekt z danymi
+	
+	// potrzebujemy hooka Effect i funkcji asynchronicznej
+	const getWeatherInfo = useCallback(async () => {
+		//użyty useCallback aby funkcja nie wywoływała się gdy nie było zmian
+		try {
 			let url = API_LINK + `${enteredCity}` + API_UNITS + API_KEY;
 			let res = await fetch(url); // resolve czekamy na odpowiedż z tego adresu
 			let data = await res.json(); //odczytujemy dane z data w postaci jsona
@@ -33,21 +36,17 @@ const SearchCity = () => {
 				country,
 				sunset,
 			};
-
-            setWeatherInfo(myNewWeatherInfo)
-
-			console.log(myNewWeatherInfo);
-		
+			console.log(data);
+			setWeatherInfo(myNewWeatherInfo);
 		} catch (err) {
 			console.log(err);
 		}
-	}, [enteredCity]);
+	}, [enteredCity]); //tablica asocjacji
 
 	useEffect(() => {
 		// po każdej zmianie zmiennej enteredCity funkcja w useEffect będzie się uruchamiała dlatego do tablicy zależności wpisujemy tą zmienną gdybyśmy tego nie zrobili to funkcja zadziałaby tylko raz przy pierwszym renderze.
 		getWeatherInfo();
 	}, [enteredCity, getWeatherInfo]);
-	// potrzebujemy hooka Effect i funkcji asynchronicznej
 
 	return (
 		<>
@@ -66,7 +65,7 @@ const SearchCity = () => {
 					</button>
 				</div>
 			</div>
-			<WeatherDetails {...weatherInfo}/>
+			<WeatherDetails {...weatherInfo} />
 		</>
 	);
 };

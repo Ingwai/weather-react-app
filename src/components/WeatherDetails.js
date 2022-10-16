@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './style.css';
 
 const WeatherDetails = props => {
-	const [weatherState, setWeatherState] = useState('');
+	const [weatherState, setWeatherState] = useState(''); //renderujemy zmiany ikon pogody
 	useEffect(() => {
 		if (props.weatherType) {
 			switch (props.weatherType) {
@@ -26,7 +26,7 @@ const WeatherDetails = props => {
 					break;
 			}
 		}
-	}, [weatherState, props.weatherType]);
+	}, [props.weatherType]);
 
 	let date = new Date(props.sunset * 1000);
 	let timeStr = `${date.getHours()}:${date.getMinutes()}`;
